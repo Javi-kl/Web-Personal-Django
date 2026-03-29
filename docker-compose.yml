@@ -70,6 +70,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:Z
       - static_volume:/app/staticfiles:Z
+      - /etc/letsencrypt:/etc/letsencrypt:ro,z
     depends_on:
       - web
 # =============================================================================
