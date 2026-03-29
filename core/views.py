@@ -1,7 +1,6 @@
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -28,16 +27,9 @@ class AboutView(TemplateView):
         return context
 
 
-class UserLoginView(FormView):
+class UserLoginView(LoginView):
     template_name = "core/login.html"
-    form_class = AuthenticationForm
     success_url = "/"
-
-    def form_valid(self, form):
-        user = form.get_user()
-        login(self.request, user)
-        messages.success(self.request, f"Bienvenido {user.username}")
-        return super().form_valid(form)
 
 
 class UserLogoutView(LogoutView):
