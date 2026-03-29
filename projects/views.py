@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -10,6 +11,7 @@ from django.views.generic import (
     UpdateView,
 )
 from django.views.generic.edit import FormMixin
+from django_ratelimit.decorators import ratelimit
 
 from .forms import CommentForm
 from .models import Comment, ProjectModel
@@ -45,6 +47,7 @@ class ProjectDetailView(DetailView, FormMixin):
         context["comments"] = self.object.comments.select_related("author").all()
         return context
 
+    @method_decorator(ratelimit(key="ip", rate="5/m", method="POST", block=True))
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(f"{reverse('core:login')}?next={request.path}")

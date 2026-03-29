@@ -9,7 +9,8 @@ services:
   db:
     image: postgres:16-alpine
     container_name: portfolio-postgres
-    
+    ports:
+      - "5432:5432" 
     # Variables de entorno (leen de .env automáticamente)
     environment:
       POSTGRES_DB: ${POSTGRES_DB}

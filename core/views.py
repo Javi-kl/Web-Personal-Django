@@ -1,11 +1,12 @@
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth.views import LogoutView
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import FormView, TemplateView
+from django_ratelimit.decorators import ratelimit
 
 from projects.models import ProjectModel
 
@@ -28,15 +29,14 @@ class AboutView(TemplateView):
         return context
 
 
-class UserLoginView(FormView):
+@method_decorator(
+    ratelimit(key="ip", rate="5/m", method="POST", block=True), name="dispatch"
+)
+class UserLoginView(LoginView):
     template_name = "core/login.html"
-    form_class = AuthenticationForm
-    success_url = "/"
 
     def form_valid(self, form):
-        user = form.get_user()
-        login(self.request, user)
-        messages.success(self.request, f"Bienvenido {user.username}")
+        messages.success(self.request, f"Bienvenido {form.get_user().username}")
         return super().form_valid(form)
 
 
@@ -48,6 +48,7 @@ class UserLogoutView(LogoutView):
         return super().post(request, *args, **kwargs)
 
 
+@method_decorator(ratelimit(key="ip", rate="5/h", block=True), name="dispatch")
 class RegisterView(FormView):
     template_name = "core/register.html"
     form_class = UserCreationForm
@@ -63,6 +64,9 @@ class RegisterView(FormView):
         return super().form_valid(form)
 
 
+@method_decorator(
+    ratelimit(key="ip", rate="2/m", method="POST", block=True), name="dispatch"
+)
 class ContactFormView(FormView):
     template_name = "core/contact.html"
     form_class = ContactForm
