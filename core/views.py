@@ -29,7 +29,10 @@ class AboutView(TemplateView):
 
 class UserLoginView(LoginView):
     template_name = "core/login.html"
-    success_url = "/"
+
+    def form_valid(self, form):
+        messages.success(self.request, f"Bienvenido {form.get_user().username}")
+        return super().form_valid(form)
 
 
 class UserLogoutView(LogoutView):
