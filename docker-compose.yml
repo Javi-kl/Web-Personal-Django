@@ -1,16 +1,11 @@
-# =============================================================================
-# ORQUESTACIÓN CON PODMAN-COMPOSE (compatible con docker-compose)
-# =============================================================================
-# Ejecutar con: podman-compose up -d
+
 services:
   # ===========================================================================
-  # BASE DE DATOS POSTGRESQL
+  # POSTGRESQL
   # ===========================================================================
   db:
     image: postgres:16-alpine
     container_name: portfolio-postgres
-    ports:
-      - "5432:5432" 
     # Variables de entorno (leen de .env automáticamente)
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -27,6 +22,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+    restart: unless-stopped
   # ===========================================================================
   # APLICACIÓN DJANGO
   # ===========================================================================
@@ -35,7 +32,15 @@ services:
     container_name: portfolio-web
     
     # Comando a ejecutar (sobrescribe CMD del Dockerfile)
-    command: gunicorn personal_web.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120 --log-level debug --error-logfile -
+    command: gunicorn personal_web.wsgi:application 
+      --bind 0.0.0.0:8000 
+      --workers 3 
+      --timeout 30 
+      --graceful-timeout 10 
+      --max-requests 1000 
+      --max-requests-jitter 50 
+      --log-level warning 
+      --error-logfile -
     
     # Volúmenes: código (desarrollo) y estáticos
     volumes:
@@ -61,6 +66,12 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=db    # Nombre del servicio, no localhost
       - POSTGRES_PORT=5432
+
+    restart: unless-stopped
+
+# ===========================================================================
+# NGINX
+# ===========================================================================
   nginx:
     image: nginx:alpine
     container_name: portfolio-nginx
@@ -73,6 +84,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro,z
     depends_on:
       - web
+    restart: unless-stopped
 # =============================================================================
 # VOLÚMENES PERSISTENTES
 # =============================================================================
