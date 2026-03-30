@@ -35,7 +35,7 @@ services:
     container_name: portfolio-web
     
     # Comando a ejecutar (sobrescribe CMD del Dockerfile)
-    command: gunicorn personal_web.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn personal_web.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120 --log-level debug --error-logfile -
     
     # Volúmenes: código (desarrollo) y estáticos
     volumes:
