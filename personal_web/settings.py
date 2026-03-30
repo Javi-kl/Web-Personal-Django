@@ -94,6 +94,7 @@ DATABASES = {
         "PASSWORD": config("POSTGRES_PASSWORD", default=""),
         "HOST": config("POSTGRES_HOST", default=""),
         "PORT": config("POSTGRES_PORT", default=""),
+        "CONN_MAX_AGE": 60,
     }
 }
 
