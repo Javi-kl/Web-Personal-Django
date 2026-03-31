@@ -16,7 +16,7 @@
 - personal_web - Configuración del proyecto
 ### Modelos:
 - Contact - Formulario de contacto
-- ProjectModel - Proyectos con imagen(Deshabilitado temporalmente) y descripción markdown
+- ProjectModel - Proyectos con (imagen -> deshabilitadas temporalmente) y descripción markdown
 - Comment - Comentarios de usuarios en proyectos
 ### Funcionalidades:
 - Portfolio de proyectos (CRUD solo para superuser)
