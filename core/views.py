@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
@@ -25,7 +27,11 @@ class AboutView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["titulo"] = "Sobre mí"
+        about_path = Path(__file__).parent.parent / "about.md"
+        if about_path.exists():
+            context["contenido"] = about_path.read_text()
+        else:
+            context["contenido"] = "Contenido no disponible."
         return context
 
 
