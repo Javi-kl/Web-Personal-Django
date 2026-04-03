@@ -44,7 +44,6 @@ python manage.py runserver
 
 ## Notas
 
-Desarrollado a partir de base ConquerBlocks, extendido con modelos y 
-lógica propios. IA usada para frontend y tests base.
+Proyecto basado inicialmente en ConquerBlocks, ampliado con modelos de datos y lógica de negocio propios. El frontend y la estructura de los tests se han generado con asistencia de IA para priorizar el desarrollo del backend.
 
 ---
