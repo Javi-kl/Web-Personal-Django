@@ -1,15 +1,11 @@
 <div class="projects-grid">
     {% for project in projects %}
         <article class="project-card" id="{{project.pk}}">
-<<<<<<< Updated upstream
-            {# Imagen de proyecto deshabilitada temporalmente #}
-=======
             {% if project.images.first %}
                 <img src="{{ project.images.first.image.url }}" 
                      alt="Imagen de {{ project.title }}"
                      loading="lazy">
             {% endif %}
->>>>>>> Stashed changes
             <div class="project-card-content">
                 <h2>{{project.title}}</h2>
                 <p class="project-card-meta">Publicado: {{ project.created_at|date:"d/m/Y" }}</p>
