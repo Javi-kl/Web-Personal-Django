@@ -6,12 +6,14 @@
         <li><a href="{% url 'core:register' %}">REGISTRO</a></li>
     {% endif %}
     {% if request.user.is_authenticated %}
-        <form method="post" action="{% url 'core:logout' %}">
-            {% csrf_token %}
-            <button type="submit">CERRAR SESIÓN</button>
-        </form>
+        <li>
+            <form method="post" action="{% url 'core:logout' %}">
+                {% csrf_token %}
+                <button type="submit">CERRAR SESIÓN</button>
+            </form>
+        </li>
     {% else %}
-        <button><a href="{% url 'core:login' %}">LOGIN</a></button>
+        <li><button><a href="{% url 'core:login' %}">LOGIN</a></button></li>
     {% endif %}
 </ul>
 

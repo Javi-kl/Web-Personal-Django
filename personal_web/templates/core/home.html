@@ -4,7 +4,7 @@
 {% block page_content%}
     <h1>Proyectos</h1>
     {% if request.user.is_superuser %}
-        <ul>
+        <ul class="admin-links">
             <li><a href="{% url 'projects:project_create' %}">Crear Proyecto</a></li>
         </ul>
         {% endif %}

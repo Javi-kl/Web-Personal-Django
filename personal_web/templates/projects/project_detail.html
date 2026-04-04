@@ -12,7 +12,23 @@
         </ul>
         {% endif %}
         <h1>{{project.title}}</h1>
+<<<<<<< Updated upstream
         {# Imagen de proyecto deshabilitada temporalmente #} 
+=======
+        
+        {% if project.images.exists %}
+            <div class="project-images">
+                {% for img in project.images.all %}
+                    <picture onclick="openImageModal('{{ img.image.url }}', 'Imagen de {{ project.title }}')">
+                        <img src="{{ img.image.url }}" 
+                            alt="Imagen de {{ project.title }}"
+                            loading="lazy">
+                    </picture>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+>>>>>>> Stashed changes
         <div>
             {{project.description|render_markdown}}
         </div>
@@ -49,5 +65,39 @@
             <p><a href="{% url 'core:login' %}?next={{ request.path }}">Inicia sesión</a> para comentar.</p>
         {% endif %}
     </section>
-    
+
+<!-- Modal para ver imagen completa -->
+<dialog id="image-modal" class="image-modal">
+    <button class="image-modal-close" onclick="closeImageModal()">✕ Cerrar</button>
+    <img id="modal-image" src="" alt="">
+</dialog>
+
+<script>
+function openImageModal(imageUrl, altText) {
+    const modal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image');
+    modalImage.src = imageUrl;
+    modalImage.alt = altText;
+    modal.showModal();
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('image-modal');
+    modal.close();
+}
+
+// Cerrar con tecla ESC
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    }
+});
+
+// Cerrar al hacer click fuera de la imagen
+document.getElementById('image-modal').addEventListener('click', (e) => {
+    if (e.target.tagName !== 'IMG') {
+        closeImageModal();
+    }
+});
+</script>
 {% endblock %}

@@ -22,9 +22,6 @@ class ProjectCreateViewTest(TestCase):
 
         self.url = reverse("projects:project_create")
 
-    # -------------------------------------------------------------------------
-    # TEST 5: Seguridad - Solo superusers pueden crear
-    # -------------------------------------------------------------------------
     def test_create_requires_superuser(self):
         """
         Test: Solo superusers pueden acceder a crear proyecto.
@@ -72,9 +69,6 @@ class ProjectUpdateViewTest(TestCase):
         )
         self.url = reverse("projects:project_update", kwargs={"pk": self.project.pk})
 
-    # -------------------------------------------------------------------------
-    # TEST 6: Seguridad - Solo superusers pueden editar
-    # -------------------------------------------------------------------------
     def test_update_requires_superuser(self):
         """
         Test: Solo superusers pueden editar proyectos.
@@ -102,9 +96,6 @@ class ProjectDeleteViewTest(TestCase):
         self.project = ProjectModel.objects.create(title="Proyecto a Borrar")
         self.url = reverse("projects:project_delete", kwargs={"pk": self.project.pk})
 
-    # -------------------------------------------------------------------------
-    # TEST 7: Seguridad - Solo superusers pueden borrar
-    # -------------------------------------------------------------------------
     def test_delete_requires_superuser(self):
         """
         Test: Solo superusers pueden borrar proyectos.
