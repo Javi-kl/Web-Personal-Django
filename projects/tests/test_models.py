@@ -12,9 +12,6 @@ class ProjectModelTest(TestCase):
             username="testuser", email="test@example.com", password="testpass123"
         )
 
-    # -------------------------------------------------------------------------
-    # TEST 1: Creación básica de un modelo
-    # -------------------------------------------------------------------------
     def test_create_project(self):
         """
         Test: Crear un proyecto con datos básicos.
@@ -34,9 +31,6 @@ class ProjectModelTest(TestCase):
         project_from_db = ProjectModel.objects.get(id=project_id)
         self.assertEqual(project_from_db.title, "Mi Proyecto Portfolio")
 
-    # -------------------------------------------------------------------------
-    # TEST 2: Representación string (__str__)
-    # -------------------------------------------------------------------------
     def test_project_str(self):
         """
         Test: El método __str__ devuelve el título.
@@ -55,9 +49,6 @@ class CommentModelTest(TestCase):
         )
         self.project = ProjectModel.objects.create(title="Proyecto para comentarios")
 
-    # -------------------------------------------------------------------------
-    # TEST 3: Relaciones ForeignKey
-    # -------------------------------------------------------------------------
     def test_create_comment(self):
         """
         Test: Crear comentario vinculado a proyecto y usuario.
@@ -76,9 +67,6 @@ class CommentModelTest(TestCase):
         self.assertEqual(comments_from_project.count(), 1)
         self.assertIn(comment, comments_from_project)
 
-    # -------------------------------------------------------------------------
-    # TEST 4:__str__ con truncado
-    # -------------------------------------------------------------------------
     def test_comment_str(self):
         """
         Test: __str__ trunca contenido largo.
