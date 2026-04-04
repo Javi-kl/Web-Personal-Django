@@ -7,7 +7,7 @@
 | Lenguaje | Python 3.14 |
 | Base de datos | SQLite3 |
 | Markdown | markdownx 4.0.9 |
-| Imágenes | Django Thumbnails + Pillow |
+| Imágenes | Django Thumbnails + Pillow | 
 
 ## Estructura
 ### Apps:
@@ -16,7 +16,7 @@
 - personal_web - Configuración del proyecto
 ### Modelos:
 - Contact - Formulario de contacto
-- ProjectModel - Proyectos con imagen y descripción markdown
+- ProjectModel - Proyectos con (imagen -> deshabilitadas temporalmente) y descripción markdown
 - Comment - Comentarios de usuarios en proyectos
 ### Funcionalidades:
 - Portfolio de proyectos (CRUD solo para superuser)
@@ -40,11 +40,10 @@ python manage.py runserver
 - [x] App de proyectos/portfolio
 - [x] Comentarios
 - [x] Tests unitarios
-- [ ] Despliegue en producción
+- [x] Despliegue en producción
 
 ## Notas
 
-Desarrollado a partir de base ConquerBlocks, extendido con modelos y 
-lógica propios. IA usada para frontend y tests base.
+Proyecto basado inicialmente en ConquerBlocks, ampliado con modelos de datos y lógica de negocio propios. El frontend y la estructura de los tests se han generado con asistencia de IA para priorizar el desarrollo del backend.
 
 ---

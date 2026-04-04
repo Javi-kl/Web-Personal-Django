@@ -41,13 +41,7 @@ class ProjectModel(models.Model):
     created_at = models.DateTimeField(
         verbose_name="Fecha y hora de creación", default=timezone.now
     )
-    # TEMPORAL: Descomentar al configurar almacenamiento S3/Nginx
-    # project_img = ImageField(
-    #    verbose_name="Imagen del proyecto",
-    #    upload_to="projects/images/",
-    #    null=True,
-    #    blank=True,
-    # )
+
     github_url = models.URLField(verbose_name="GitHub", blank=True, null=True)
 
     created_by = models.ForeignKey(
@@ -63,3 +57,27 @@ class ProjectModel(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+
+class ProjectImage(models.Model):
+    project = models.ForeignKey(
+        ProjectModel,
+        on_delete=models.CASCADE,
+        related_name="images",
+        verbose_name="Proyecto",
+    )
+    image = models.ImageField(
+        verbose_name="Imagen",
+        upload_to="projects/images/",
+    )
+
+    order = models.PositiveIntegerField(
+        verbose_name="Orden", default=0, help_text="Orden de aparición (0 = principal)"
+    )
+
+    class Meta:
+        verbose_name = "Imagen del proyecto"
+        verbose_name_plural = "Imágenes del proyecto"
+
+    def __str__(self) -> str:
+        return f"Imagen de {self.project.title}"
