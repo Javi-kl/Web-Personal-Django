@@ -12,9 +12,6 @@
         </ul>
         {% endif %}
         <h1>{{project.title}}</h1>
-<<<<<<< Updated upstream
-        {# Imagen de proyecto deshabilitada temporalmente #} 
-=======
         
         {% if project.images.exists %}
             <div class="project-images">
@@ -28,7 +25,6 @@
             </div>
         {% endif %}
         
->>>>>>> Stashed changes
         <div>
             {{project.description|render_markdown}}
         </div>
