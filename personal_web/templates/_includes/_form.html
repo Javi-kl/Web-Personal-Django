@@ -4,9 +4,17 @@
     {% endif %}
     <a href="{{ request.META.HTTP_REFERER|default:'/' }}"> <= Volver</a>
     {{ form.media }}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p}}
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        {% if image_formset %}
+            <h3>Imágenes del proyecto</h3>
+            {{ image_formset.management_form }}
+            {% for img_form in image_formset %}
+                <div class="image-form">
+                    {{ img_form.as_p }}
+            </div>
+            {% endfor %}
+        {% endif %}
         <button type="submit">Guardar</button>
     </form>
 {% endif %}

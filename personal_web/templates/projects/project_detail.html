@@ -1,8 +1,6 @@
 {% extends "layout_base.html" %}
 {% load markdown_extras %}
-
 {% block head_title %}Detalles Proyecto{% endblock%}
-
 {% block page_content%}
     <article id="{{project.pk}}">
         {% if request.user.is_superuser %}
@@ -33,7 +31,6 @@
         {% endif %}
         <p>Publicado: {{ project.created_at}} </p>
     </article>
-
     <section class="comments-section">
         <h2>Comentarios ({{ comments.count }})</h2>
         

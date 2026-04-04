@@ -13,7 +13,7 @@ from django.views.generic import (
 from django.views.generic.edit import FormMixin
 from django_ratelimit.decorators import ratelimit
 
-from .forms import CommentForm
+from .forms import CommentForm, ProjectImageFormSet, ProjectModelForm
 from .models import Comment, ProjectModel
 
 
@@ -24,13 +24,26 @@ class SuperuserRequiredMixin(UserPassesTestMixin):
 
 class ProjectCreateView(SuperuserRequiredMixin, CreateView):
     model = ProjectModel
-    fields = ["title", "description", "github_url", "order"]
+    form_class = ProjectModelForm
     template_name = "projects/project_create.html"
     success_url = reverse_lazy("core:home")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["image_formset"] = ProjectImageFormSet()
+        return context
+
     def form_valid(self, form):
         form.instance.created_by = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+
+        image_formset = ProjectImageFormSet(
+            self.request.POST, self.request.FILES, instance=self.object
+        )
+        if image_formset.is_valid():
+            image_formset.save()
+
+        return response
 
 
 class ProjectDetailView(DetailView, FormMixin):
@@ -69,9 +82,25 @@ class ProjectDetailView(DetailView, FormMixin):
 
 class ProjectUpdateView(SuperuserRequiredMixin, UpdateView):
     model = ProjectModel
-    fields = ["title", "description", "github_url", "order"]
+    form_class = ProjectModelForm
     template_name = "projects/project_update.html"
     success_url = reverse_lazy("core:home")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["image_formset"] = ProjectImageFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        image_formset = ProjectImageFormSet(
+            self.request.POST, self.request.FILES, instance=self.object
+        )
+        if image_formset.is_valid():
+            image_formset.save()
+
+        return response
 
 
 class ProjectDeleteView(SuperuserRequiredMixin, DeleteView):
