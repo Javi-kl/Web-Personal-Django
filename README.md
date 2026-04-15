@@ -40,17 +40,22 @@ cp .env.example .env   # editar valores
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
-Despliegue en producción
+```
+## Despliegue en producción
+```
 cp .env.example .env.production   # configurar con valores reales
 podman-compose up -d
-Infraestructura: Nginx (proxy inverso + SSL), Gunicorn (WSGI), PostgreSQL — cada servicio en su contenedor.
-Roadmap
+```
+### Infraestructura: 
+Nginx (proxy inverso + SSL), Gunicorn (WSGI), PostgreSQL — cada servicio en su contenedor.
+## Roadmap
 - [x] Sistema de contacto
 - [x] App de proyectos/portfolio
 - [x] Comentarios
 - [x] Tests unitarios
 - [x] Despliegue en producción
 - [x] Imágenes por proyecto
-Notas
-Proyecto basado inicialmente en ConquerBlocks, ampliado con modelos de datos y lógica de negocio propios. El frontend y la estructura de los tests se generaron con asistencia de IA, priorizando el desarrollo del backend.
+## Notas
+ Proyecto basado inicialmente en ConquerBlocks, ampliado con modelos de datos y lógica de negocio propios. El frontend y la estructura de los tests se generaron con asistencia de IA, priorizando el desarrollo del backend.
+
 ---
