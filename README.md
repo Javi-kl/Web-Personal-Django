@@ -1,8 +1,8 @@
 # Portfolio Personal - Javi-kl 
-> Portfolio web con sistema de autenticación, gestión de proyectos y comentarios.
 [![CI](https://github.com/Javi-kl/Web-Personal-Django/actions/workflows/ci.yml/badge.svg)](https://github.com/Javi-kl/Web-Personal-Django/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.14-blue.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-6.0-green.svg)](https://www.djangoproject.com/)
+> Portfolio web con sistema de autenticación, gestión de proyectos y comentarios.
 ## Stack Tecnológico
 - **Django** / Python 3.14
 - **PostgreSQL 16** (producción y desarrollo)
@@ -63,9 +63,11 @@ docker compose up -d web
 ### Infraestructura: 
 Nginx (proxy inverso + SSL) → Gunicorn (WSGI) → Django → PostgreSQL, cada servicio en su contenedor.
 ## Tests
+```
 python manage.py test
 python manage.py test -v 2 
-
+```
+---
 > Nota: Proyecto basado inicialmente en ConquerBlocks, ampliado con modelos de datos y lógica de negocio propios. 
 > El frontend y la estructura de los tests se generaron con asistencia de IA, priorizando el desarrollo del backend.
 
