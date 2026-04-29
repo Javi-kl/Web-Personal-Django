@@ -6,7 +6,7 @@ Este repositorio contiene un portfolio personal en Django con autenticación bá
 
 ## Stack tecnológico y arquitectura
 
-La aplicación está construida sobre Django 6.0.2 y Python 3.14, utilizando PostgreSQL como base de datos por defecto en `settings.py`. Se usan dependencias adicionales como `django-markdownx` para contenidos en Markdown, `gunicorn` como servidor WSGI en producción, `psycopg2-binary` para PostgreSQL y `whitenoise` para servir estáticos.
+La aplicación está construida sobre Django 6.0.+ y Python 3.14, utilizando PostgreSQL como base de datos por defecto en `settings.py`. Se usan dependencias adicionales como `django-markdownx` para contenidos en Markdown, `gunicorn` como servidor WSGI en producción, `psycopg2-binary` para PostgreSQL y `whitenoise` para servir estáticos.
 
 ### Componentes principales
 
@@ -24,7 +24,7 @@ Principales archivos y directorios en la raíz del proyecto:
 | `personal_web/` | Configuración del proyecto, `settings.py`, `urls.py`, `context_processor.py`, `wsgi.py`, `asgi.py`. |
 | `core/` | Vistas, URLs, formularios, modelos y tests para home, contacto y auth. |
 | `projects/` | Vistas, URLs, modelos, formularios y tests de proyectos y comentarios. |
-| `static/` | CSS (`matrix_theme.css`), JS (`matrix-rain.js`) e imágenes (avatar). |
+| `static/` | CSS (`matrix_theme.css`) e imágenes (avatar). |
 | `Dockerfile` | Definición de la imagen Docker con Gunicorn y collectstatic en build. |
 | `docker-compose.yml` | Orquestación de contenedores para DB, app web y Nginx. |
 | `nginx/nginx.conf` | Reverse proxy hacia Gunicorn y servido de estáticos/media. |
@@ -40,8 +40,12 @@ El modelo `Contact` representa mensajes enviados desde el formulario de contacto
 
 ### ProjectModel y Comment (app `projects`)
 
-`ProjectModel` almacena proyectos del portfolio con título, descripción en Markdown (`MarkdownxField`), fecha de creación, URL de GitHub opcional, usuario creador (`created_by`) y un campo `order` para ordenar manualmente.
-`Comment` representa comentarios asociados a un proyecto y a un usuario (`author`), con contenido de hasta 1000 caracteres y timestamp de creación.
+`ProjectModel` almacena proyectos del portfolio con título, descripción en Markdown
+(`MarkdownxField`), fecha de creación, URL de GitHub opcional, usuario creador
+(`created_by`) y un campo `order` para ordenar manualmente.
+`ProjectImage` asocia imágenes a un proyecto mediante FK, con campos `image`
+(`ImageField`, subida a `projects/images/`) y `order` para controlar el orden
+de apparición.
 
 ## Rutas y navegación
 
@@ -59,7 +63,7 @@ El fichero `personal_web/urls.py` incluye:
 En `core/urls.py` se definen:
 
 - `/` → `home`, listado de proyectos recientes en la página principal.
-- `/sobre-nosotros/` → `AboutView`, página "Sobre mí".
+- `/sobre-mi/` → `AboutView`, página "Sobre mí".
 - `/contacto/` → `ContactFormView`, formulario de contacto.
 - `/registro/` → `RegisterView`, formulario de creación de usuario.
 - `/login/` → `UserLoginView`, login con `AuthenticationForm`.
@@ -218,6 +222,26 @@ python manage.py test projects
 
 `ContactFormTest` valida que el formulario de contacto guarda los datos y marca `contactado=False` por defecto. `ProjectModelTest` y `CommentModelTest` validan la creación y representación de proyectos y comentarios, y `Project*ViewTest` comprueba que solo superusuarios pueden acceder a las vistas de creación, edición y borrado.
 
+### Tests disponibles
+| App | Archivo | Qué testea |
+|-----|---------|------------|
+| `core` | `test_forms.py` | `ContactForm` guarda datos válidos correctamente |
+| `core` | `test_ratelimit.py` | Rate limiting en login, registro y contacto |
+| `projects` | `test_models.py` | Creación y representación de proyectos y comentarios |
+| `projects` | `test_views.py` | Permisos de superusuario en vistas CRUD |
+| `projects` | `test_ratelimit.py` | Rate limiting en comentarios |
+Todos los tests usan `django.test.TestCase`.
+
+## CI/CD
+El proyecto usa GitHub Actions (`.github/workflows/ci.yml`) con:
+- Python 3.14 + PostgreSQL 16 como servicio contenedorizado
+- `manage.py check` — validación de configuración
+- `manage.py makemigrations --check` — detección de migraciones pendientes
+- `manage.py migrate` — verificación de migraciones
+- `manage.py collectstatic` — validación de estáticos con WhiteNoise manifest
+- `manage.py test -v 2` — ejecución de tests
+Se ejecuta en cada push y PR a la rama `main`.
+
 ## Puesta en marcha con Docker/Podman (stack completa)
 
 El fichero `docker-compose.yml` orquesta tres servicios: base de datos PostgreSQL (`db`), aplicación Django con Gunicorn (`web`) y Nginx como reverse proxy (`nginx`).
@@ -264,14 +288,13 @@ Durante el build se ejecuta `collectstatic` con `SECRET_KEY` y `DEBUG` de build 
 
 ## Configuración de Nginx
 
-`nginx/nginx.conf` define un `upstream django` apuntando al contenedor `web:8000` y un `server` que escucha en el puerto 80.
-
-- `/static/` se sirve desde `/app/staticfiles/` con headers de caché de un año y `Cache-Control: public`.
-- `/media/` se sirve desde `/app/media/`.
-- `/` se proxifica a `http://django`, con headers `Host`, `X-Real-IP`, `X-Forwarded-For` y `X-Forwarded-Proto` configurados correctamente.
-- Se incluye `mime.types` para que los tipos de archivo (CSS, JS, etc.) se sirvan correctamente.
-
-Para producción real, es necesario cambiar `server_name tu-dominio.com www.tu-dominio.com` por el dominio real y configurar certificados TLS (por ejemplo, con Let’s Encrypt).
+`nginx/nginx.conf` define un `upstream django` apuntando al contenedor `web:8000` con dos bloques `server`:
+- **Puerto 80**: redirige todo el tráfico HTTP a HTTPS (301).
+- **Puerto 443**: sirve la aplicación con SSL (certificados Let's Encrypt en `/etc/letsencrypt/`).
+  - `/static/` → `/app/staticfiles/` con caché de 1 año.
+  - `/media/` → `/app/media/`.
+  - `/` → proxy a Gunicorn con headers `X-Real-IP`, `X-Forwarded-For`, `X-Forwarded-Proto`.
+El `server_name` configurado es `javikl.dev www.javikl.dev`.
 
 ## Gestión de estáticos y seguridad
 
@@ -295,7 +318,7 @@ El historial de commits muestra la evolución desde un blog inicial hasta el por
 
 `AGENTS.md` define guías de estilo como longitud máxima de línea 119, indentación de 4 espacios, convención de nombres (PascalCase para modelos, snake_case para funciones/variables, UPPER_SNAKE_CASE para constantes) y ejemplos de patrones para modelos, admin y vistas.
 
-También recomienda herramientas adicionales como `black`, `isort`, `ruff`, `mypy + django-stubs` y `pytest-django` para mejorar la calidad del código, así como una tabla de referencia rápida de comandos de Django (`runserver`, `test`, `makemigrations`, `migrate`, `check`).
+También recomienda herramientas adicionales como `black`, `isort`, `ruff` y `mypy + django-stubs` para mejorar la calidad del código, así como una tabla de referencia rápida de comandos de Django (`runserver`, `test`, `makemigrations`, `migrate`, `check`).
 
 ## Flujo recomendado de trabajo en un proyecto similar
 
