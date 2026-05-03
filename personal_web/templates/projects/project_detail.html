@@ -1,5 +1,5 @@
 {% extends "layout_base.html" %}
-{% load markdown_extras %}
+{% load markdown_extras static %}
 {% block head_title %}Detalles Proyecto{% endblock%}
 {% block page_content%}
     <article id="{{project.pk}}">
@@ -14,11 +14,11 @@
         {% if project.images.exists %}
             <div class="project-images">
                 {% for img in project.images.all %}
-                    <picture onclick="openImageModal('{{ img.image.url }}', 'Imagen de {{ project.title }}')">
-                        <img src="{{ img.image.url }}" 
-                            alt="Imagen de {{ project.title }}"
-                            loading="lazy">
-                    </picture>
+                <picture data-modal-url="{{ img.image.url }}" 
+                         data-modal-alt="Imagen de {{ project.title }}"
+                         class="project-image-trigger">
+                    <img src="{{ img.image.url }}" alt="Imagen de {{ project.title }}" loading="lazy">
+                </picture>
                 {% endfor %}
             </div>
         {% endif %}
@@ -61,36 +61,9 @@
 
 <!-- Modal para ver imagen completa -->
 <dialog id="image-modal" class="image-modal">
-    <button class="image-modal-close" onclick="closeImageModal()">✕ Cerrar</button>
+    <button class="image-modal-close">✕ Cerrar</button>
     <img id="modal-image" src="" alt="">
 </dialog>
 
-<script>
-function openImageModal(imageUrl, altText) {
-    const modal = document.getElementById('image-modal');
-    const modalImage = document.getElementById('modal-image');
-    modalImage.src = imageUrl;
-    modalImage.alt = altText;
-    modal.showModal();
-}
-
-function closeImageModal() {
-    const modal = document.getElementById('image-modal');
-    modal.close();
-}
-
-// Cerrar con tecla ESC
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeImageModal();
-    }
-});
-
-// Cerrar al hacer click fuera de la imagen
-document.getElementById('image-modal').addEventListener('click', (e) => {
-    if (e.target.tagName !== 'IMG') {
-        closeImageModal();
-    }
-});
-</script>
+<script src="{% static 'js/image_modal.js' %}" defer></script>
 {% endblock %}
