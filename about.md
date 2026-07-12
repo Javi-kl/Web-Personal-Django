@@ -10,12 +10,3 @@ Me interesan la privacidad y el software abierto desde una perspectiva práctica
 
 También suelo instalar y configurar sistemas Linux buscando entornos más simples, controlados y reproducibles. Ahora estoy explorando NixOS, versionando su configuración con Git.
 
-Intereses técnicos:
-
-    - Backend Python y APIs REST.
-    - Sistemas IA privados/local-first.
-    - RAG sobre conocimiento personal.
-    - Seguridad, privacidad y trazabilidad.
-    - Sistemas Linux y entornos reproducibles.
-    - Flujos de desarrollo asistidos por IA.
-
