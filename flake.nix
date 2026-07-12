@@ -1,5 +1,5 @@
 {
-  description = "Mi API";
+  description = "Web-Personal-Django";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
@@ -13,8 +13,7 @@
           python314                            
           ruff                                 
           basedpyright                         
-          python314Packages.python-lsp-server  # LSP base para Helix
-          python314Packages.python-lsp-ruff    # plugin ruff para el LSP
+          pre-commit
         ];
 
         shellHook = ''
