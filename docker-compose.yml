@@ -28,8 +28,10 @@ services:
   # APLICACIÓN DJANGO
   # ===========================================================================
   web:
+    userns_mode: "keep-id"
     build: .
     container_name: portfolio-web
+    
     
     # Comando a ejecutar (sobrescribe CMD del Dockerfile)
     command: gunicorn personal_web.wsgi:application 
