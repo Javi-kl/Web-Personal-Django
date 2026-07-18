@@ -31,23 +31,7 @@
         {% endif %}
         <p>Publicado: {{ project.created_at}} </p>
     </article>
-    <section class="comments-section">
-        <h2>Comentarios ({{ comments.count }})</h2>
-        
-        {% for comment in comments %}
-        <article class="comment">
-            <p><strong>{{ comment.author.username }}</strong> - {{ comment.created_at|date:"d/m/Y H:i" }}</p>
-            <p>{{ comment.content }}</p>
-            {% if request.user.is_superuser %}
-                <div class="comment-actions">
-                    <a href="{% url 'projects:comment_edit' comment.pk %}">Editar</a>|<a href="{% url 'projects:comment_delete' comment.pk %}">Eliminar</a>
-                </div>
-            {% endif %}
-        </article>
-    {% empty %}
-            <p>Sin comentarios aún.</p>
-        {% endfor %}
-        
+     
         {% if user.is_authenticated %}
             <form method="post" action="{% url 'projects:project_detail' project.pk %}">
                 {% csrf_token %}
