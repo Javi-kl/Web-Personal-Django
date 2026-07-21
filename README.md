@@ -1,44 +1,46 @@
-# Portfolio Personal - Javi-kl 
+# Portfolio personal - Javi-kl
+
 [![CI](https://github.com/Javi-kl/Web-Personal-Django/actions/workflows/ci.yml/badge.svg)](https://github.com/Javi-kl/Web-Personal-Django/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/Python-3.14-blue.svg)](https://www.python.org/)
-[![Django](https://img.shields.io/badge/Django-6.0-green.svg)](https://www.djangoproject.com/)
-> Portfolio web con sistema de autenticación, gestión de proyectos y comentarios.
-## Stack Tecnológico
-- **Django** / Python 3.14
-- **PostgreSQL 16** (producción y desarrollo)
-- **Gunicorn** + **Nginx** (reverse proxy con Let's Encrypt)
-- **Podman** (orquestación de contenedores)
-- django-markdownx (descripción de proyectos en Markdown)
-- Pillow + ProjectImage (imágenes por proyecto con orden)
-- django-ratelimit (protección contra abuso por IP)
-- python-decouple (configuración por entorno)
+[![Django](https://img.shields.io/badge/Django-6.0.5-green.svg)](https://www.djangoproject.com/)
+
+Portfolio web desarrollado con Django para presentar y administrar proyectos personales.
+
+## Stack tecnológico
+
+- **Python 3.14** y **Django 6.0.5**
+- **PostgreSQL 16**
+- **MarkdownX** y **Pillow** para contenidos e imágenes
+- **Gunicorn**, **Nginx** y **WhiteNoise** para producción
+- **Docker/Podman Compose** para la ejecución en contenedores
+
 ## Estructura
 
 | App | Descripción |
 |-----|-------------|
-| `core` | Home, Sobre mí, Contacto, Auth (login/registro/logout) |
-| `projects` | Portfolio de proyectos con imágenes y comentarios |
-| `personal_web` | Configuración global del proyecto (settings, urls, WSGI) |
+| `core` | Página principal, sección "Sobre mí" y autenticación |
+| `projects` | Consulta y administración de proyectos e imágenes |
+| `personal_web` | Configuración global, rutas, plantillas y despliegue WSGI/ASGI |
 
 | Modelo | App | Descripción |
 |--------|-----|-------------|
-| `Contact` | core | Mensajes del formulario de contacto |
-| `ProjectModel` | projects | Proyectos con descripción Markdown y enlace a GitHub |
-| `ProjectImage` | projects | Imágenes asociadas a proyectos (ordenadas) |
-| `Comment` | projects | Comentarios de usuarios en proyectos |
-### Funcionalidades:
-- Portfolio de proyectos (CRUD solo para superuser)
-- Múltiples imágenes por proyecto (inline formset)
-- Sistema de comentarios (requiere autenticación)
-- Formulario de contacto con rate limiting
-- Autenticación (login/registro/logout)
+| `ProjectModel` | `projects` | Proyecto con descripción Markdown y enlace opcional a GitHub |
+| `ProjectImage` | `projects` | Imagen asociada a un proyecto |
+
+## Funcionalidades
+
+- Listado y detalle público de proyectos
+- Descripciones en Markdown y galerías de imágenes
+- Inicio y cierre de sesión
+- CRUD de proyectos e imágenes restringido a superusuarios
+- Gestión desde el panel de administración de Django
+
 ## Seguridad
-- Variables sensibles fuera del código (python-decouple + .env)
-- Rate limiting por IP: login (5/min), registro (5/h), contacto (2/min)
-- HTTPS obligatorio en producción (redirección SSL + HSTS 1 año)
-- Cookies de sesión y CSRF solo sobre HTTPS
-- Headers: X-Frame-Options DENY, X-Content-Type-Options nosniff, X-XSS-Protection
-- SECURE_PROXY_SSL_HEADER configurado para nginx
+
+- Configuración y secretos mediante variables de entorno
+- Operaciones administrativas restringidas a superusuarios
+- Rate limiting del login: 5 intentos por minuto e IP
+- Redirección HTTPS, HSTS, cookies seguras y cabeceras de protección en producción
 
 ## Iniciar la aplicación
 
