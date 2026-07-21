@@ -31,17 +31,6 @@
         {% endif %}
         <p>Publicado: {{ project.created_at}} </p>
     </article>
-     
-        {% if user.is_authenticated %}
-            <form method="post" action="{% url 'projects:project_detail' project.pk %}">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Comentar</button>
-            </form>
-        {% else %}
-            <p><a href="{% url 'core:login' %}?next={{ request.path }}">Inicia sesión</a> para comentar.</p>
-        {% endif %}
-    </section>
 
 <!-- Modal para ver imagen completa -->
 <dialog id="image-modal" class="image-modal">
