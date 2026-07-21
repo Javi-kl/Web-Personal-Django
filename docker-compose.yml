@@ -31,8 +31,8 @@ services:
     userns_mode: "keep-id"
     build: .
     container_name: portfolio-web
-    
-    
+
+
     # Comando a ejecutar (sobrescribe CMD del Dockerfile)
     command: gunicorn personal_web.wsgi:application 
       --bind 0.0.0.0:8000 
@@ -51,7 +51,7 @@ services:
       - media_volume:/app/media
     # Puertos: host:contenedor
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     
     # Dependencias: web espera hasta que db esté "healthy"
     depends_on:
