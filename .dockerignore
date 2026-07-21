@@ -30,3 +30,16 @@ media/
 Dockerfile
 docker-compose.yml
 .dockerignore
+# Herramientas y caches locales
+.direnv/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.cache/
+# Configuración local
+.envrc
+# Backups
+*.bak
+backups/
