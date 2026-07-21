@@ -1,18 +1,13 @@
 from pathlib import Path
 
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import FormView, TemplateView
+from django.views.generic import TemplateView
 from django_ratelimit.decorators import ratelimit
 
 from projects.models import ProjectModel
-
-from .forms import ContactForm
 
 
 def home(request):
@@ -35,9 +30,7 @@ class AboutView(TemplateView):
         return context
 
 
-@method_decorator(
-    ratelimit(key="ip", rate="5/m", method="POST", block=True), name="dispatch"
-)
+@method_decorator(ratelimit(key="ip", rate="5/m", method="POST", block=True), name="dispatch")
 class UserLoginView(LoginView):
     template_name = "core/login.html"
 
@@ -52,33 +45,3 @@ class UserLogoutView(LogoutView):
     def post(self, request, *args, **kwargs):
         messages.success(request, "Has cerrado sesión.")
         return super().post(request, *args, **kwargs)
-
-
-@method_decorator(ratelimit(key="ip", rate="5/h", block=True), name="dispatch")
-class RegisterView(FormView):
-    template_name = "core/register.html"
-    form_class = UserCreationForm
-    success_url = "/"
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return HttpResponseRedirect(reverse("core:home"))
-        return super().dispatch(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-
-
-@method_decorator(
-    ratelimit(key="ip", rate="2/m", method="POST", block=True), name="dispatch"
-)
-class ContactFormView(FormView):
-    template_name = "core/contact.html"
-    form_class = ContactForm
-    success_url = reverse_lazy("core:contact")
-
-    def form_valid(self, form):
-        form.save()
-        messages.success(self.request, "Mensaje enviado correctamente.")
-        return super().form_valid(form)

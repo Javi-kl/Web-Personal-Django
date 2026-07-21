@@ -10,8 +10,9 @@ staticfiles/
 #Opencode
 .atl
 
-# Direnv (cache local de nix)
+# Caches direnv & ruff
 .direnv/
+.ruff_cache/
 
 # Backup files # 
 *.bak 
