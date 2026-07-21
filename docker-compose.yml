@@ -1,4 +1,3 @@
-
 services:
   # ===========================================================================
   # POSTGRESQL
@@ -11,11 +10,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    
+
     # Volumen persistente para datos
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    
+
     # Healthcheck: verifica que PostgreSQL esté listo
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
@@ -43,7 +42,7 @@ services:
       --max-requests-jitter 50 
       --log-level warning 
       --error-logfile -
-    
+
     # Volúmenes: código (desarrollo) y estáticos
     volumes:
       - .:/app:Z
@@ -52,12 +51,12 @@ services:
     # Puertos: host:contenedor
     ports:
       - "127.0.0.1:8000:8000"
-    
+
     # Dependencias: web espera hasta que db esté "healthy"
     depends_on:
       db:
         condition: service_healthy
-    
+
     # Variables de entorno desde .env
     environment:
       - SECRET_KEY=${SECRET_KEY}
