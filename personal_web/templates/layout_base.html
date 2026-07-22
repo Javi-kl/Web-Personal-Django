@@ -11,9 +11,15 @@
     <link rel="stylesheet" href="{% static 'css/matrix_theme.css' %}">
 </head>
 <body>
-    <div class="scanlines"></div>
     <div class="site-wrapper">
         {% include '_includes/_header.html' %}
+        {% if messages %}
+            <section class="messages" aria-label="Notificaciones">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </section>
+        {% endif %}
         <main class="page-content">
             {% block page_content %}
             {% endblock %}

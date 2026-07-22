@@ -1,12 +1,40 @@
-{% load static%}
-<header>
-    <h1><span class="prompt">$</span><span class="username">javi-kl</span><span class="cursor">_</span></h1>
-{% if site_avatar %}
-    
-    <img src="{% static 'img/avatar.jpeg' %}" alt="Avatar default">
-{% endif %}
-</header>
+{% load static %}
+<header class="site-header">
+    <a class="site-identity" href="{% url 'core:home' %}" aria-label="Ir a la página principal">
+        {% if site_avatar %}
+            <img src="{% static 'img/avatar.jpeg' %}" alt="Avatar de javi-kl">
+        {% endif %}
+        <span class="site-name">javi-kl<span class="cursor">_</span></span>
+    </a>
 
-<nav>
-    {% include '_includes/_main_menu.html' %}
-</nav>
+    <nav class="header-actions" aria-label="Enlaces personales y acceso">
+        <a class="icon-link" href="https://github.com/javi-kl" target="_blank" rel="noopener noreferrer"
+           aria-label="Perfil de GitHub" title="GitHub">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.3c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/>
+            </svg>
+        </a>
+        <a class="icon-link" href="https://www.linkedin.com/in/javier-s-3177722b9/" target="_blank"
+           rel="noopener noreferrer" aria-label="Perfil de LinkedIn" title="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.5 3H3.5A.5.5 0 0 0 3 3.5v17a.5.5 0 0 0 .5.5h17a.5.5 0 0 0 .5-.5v-17a.5.5 0 0 0-.5-.5ZM8.3 18.3H5.6V9.7h2.7v8.6ZM7 8.5a1.6 1.6 0 1 1 0-3.1 1.6 1.6 0 0 1 0 3.1Zm11.3 9.8h-2.7v-4.2c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2v4.3H9.9V9.7h2.6v1.2c.4-.7 1.2-1.5 2.5-1.5 2.7 0 3.2 1.8 3.2 4.1v4.8Z"/>
+            </svg>
+        </a>
+        {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'core:logout' %}">
+                {% csrf_token %}
+                <button class="icon-link" type="submit" aria-label="Cerrar sesión" title="Cerrar sesión">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5v-2H6V6h4V4Zm5.6 3.6-1.4 1.4 2 2H9v2h7.2l-2 2 1.4 1.4L20 12l-4.4-4.4Z"/>
+                    </svg>
+                </button>
+            </form>
+        {% else %}
+            <a class="icon-link" href="{% url 'core:login' %}" aria-label="Iniciar sesión" title="Iniciar sesión">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v9h14v-9a2 2 0 0 0-2-2Zm-7-2a2 2 0 0 1 4 0v2h-4V7Zm7 11H7v-7h10v7Z"/>
+                </svg>
+            </a>
+        {% endif %}
+    </nav>
+</header>
