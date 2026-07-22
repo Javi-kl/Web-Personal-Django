@@ -5,7 +5,7 @@ Web-Personal-Django es un portfolio personal construido con Django. Permite publ
 ## Funcionalidades
 
 - Listado y detalle público de proyectos.
-- Página "Sobre mí" generada desde `about.md`.
+- Contenido Sobre mí integrado en portada.
 - Descripciones de proyectos en Markdown.
 - Varias imágenes asociadas a cada proyecto.
 - Inicio y cierre de sesión con la autenticación de Django.
@@ -46,8 +46,7 @@ Representa una imagen asociada a un proyecto. La relación usa borrado en cascad
 
 | Ruta | Método | Acceso | Descripción |
 |------|--------|--------|-------------|
-| `/` | GET | Público | Lista los proyectos. |
-| `/sobre-mi/` | GET | Público | Renderiza el contenido de `about.md`. |
+| `/` | GET | Público | Presentación y lista los proyectos. |
 | `/login/` | GET, POST | Público | Inicio de sesión. |
 | `/logout/` | POST | Autenticado | Cierre de sesión. |
 | `/projects/<pk>` | GET | Público | Detalle de un proyecto. |
