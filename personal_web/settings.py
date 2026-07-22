@@ -17,6 +17,7 @@ from decouple import Csv, config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = BASE_DIR / "personal_web" / "templates"
+ABOUT_PATH = BASE_DIR / "about.md"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -31,7 +32,6 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost", cast=Csv())
 
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -179,8 +179,3 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True  # Previene MIME-sniffing
     SECURE_BROWSER_XSS_FILTER = True  # Ayuda contra XSS
     X_FRAME_OPTIONS = "DENY"  # Previene clickjacking
-
-
-# =============================================================================
-# WHITENOISE - ARCHIVOS ESTÁTICOS
-# =============================================================================

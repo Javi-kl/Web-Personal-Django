@@ -32,24 +32,6 @@ class PublicViewTest(TestCase):
             "Proyecto visible",
         )
 
-    def test_about_page_is_available(self):
-        response = cast(
-            HttpResponse,
-            self.client.get(
-                reverse("core:about_me"),
-            ),
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response,
-            "core/about_view.html",
-        )
-        self.assertContains(
-            response,
-            "Sobre mí",
-        )
-
 
 class AuthenticationViewTest(TestCase):
     def setUp(self):
